@@ -4,6 +4,7 @@
       <i-table
         stripe
         :columns="columns"
+        :loading="loading"
         :data="data" />
       <i-page
         :class="[prefixCls + '-page']"
@@ -58,6 +59,7 @@ export default {
         }
       ],
       data: [],
+      loading: true,
       pageNo: 1,
       pageSize: 10,
       total: 0,
@@ -90,10 +92,13 @@ export default {
         }
       }
 
+      this.loading = true
       this.$axios.get(`/kmx/pas/services/projects?size=${this.pageSize}&page=${this.pageNo}`, { params: params })
         .then(res => {
           this.data = res.data.result
           this.total = res.data.pageInfo.total
+        }).finally(() => {
+          this.loading = false
         })
     }
   }
